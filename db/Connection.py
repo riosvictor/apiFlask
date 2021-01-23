@@ -1,5 +1,10 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
+from dotenv import load_dotenv
+import os
 
+
+load_dotenv()
 
 class _SingletonMeta(type):
     _instances = {}
@@ -12,9 +17,12 @@ class _SingletonMeta(type):
 
 
 class MainConnection(metaclass=_SingletonMeta):
-    def connect(self, app):
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///people.db'
-        app.config['SQLALCHEMY_ECHO'] = True
+    def connect(self, app, db):
+        app.config['SQLALCHEMY_DATABASE_URI'] = db
+        if os.getenv("ENV") == 'TEST':
+            app.config['SQLALCHEMY_ECHO'] = False
+        else:
+            app.config['SQLALCHEMY_ECHO'] = True
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
         db = SQLAlchemy(app)
 

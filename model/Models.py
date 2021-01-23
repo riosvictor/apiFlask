@@ -5,6 +5,6 @@ class FactoryModels:
             first_name = db.Column(db.Text)
             last_name = db.Column(db.Text)
 
-            db.create_all()
+        db.create_all()
 
         return Person
